@@ -111,9 +111,9 @@ app.get('/filedownload',function(req,res) {
     });
     */
     //res.download('D:/Python/uploads/'+req.query.filename);
-    //res.send("download filename:"+req.query.filename);
+    res.send("./uploads/"+req.query.filename);
     //console.log("download filename:"+req.query.filename);
-    res.download('./uploads/'+req.query.filename);
+    //res.download("./uploads/"+req.query.filename);
 });
  
 
