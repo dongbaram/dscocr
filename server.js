@@ -46,15 +46,15 @@ app.post('/dscocr',function(req,res) {
     var storage =   multer.diskStorage({
         
         destination: function (req, file, cb) {                 // 파일 업로드 경로 지정
-          //cb(null, './uploads');          //운영 linux
-          cb(null, 'D:/Python/uploads');    //로컬 개발
+          cb(null, './uploads');          //운영 linux
+          //cb(null, 'D:/Python/uploads');    //로컬 개발
         },
         
         filename: function (req, file, cb) {                    //파일 업로드 처리
           console.log("file.originalname:"+file.originalname);
  
-          upfilename = Date.now()+"_"+file.originalname         //날짜 + 시간 + 원래 파일명
-          //upfilename = file.originalname         //날짜 + 시간 + 원래 파일명
+          //upfilename = Date.now()+"_"+file.originalname         //날짜 + 시간 + 원래 파일명
+          upfilename = file.originalname         //날짜 + 시간 + 원래 파일명
           cb(null, upfilename );
           console.log("upfilename:"+upfilename);
           temp2 = upfilename;
@@ -75,8 +75,8 @@ app.post('/dscocr',function(req,res) {
 
         //파이썬 호출----------------------------------
         var spawn = require('child_process').spawn,
-        py = spawn('python',['D:/Python/MS OCR/nodejs_call_data.py']),  //파이썬 호출 파일
-        //py = spawn('python',['./python/nodejs_call_data.py']),  //운영 linux
+        //py = spawn('python',['D:/Python/MS OCR/nodejs_call_data.py']),  //파이썬 호출 파일
+        py = spawn('python',['./python/nodejs_call_data.py']),  //운영 linux
         
         data = {"param1":"v1","param2":"v2"},       //파이썬에 전달할 파라미터
         dataString = "";
@@ -111,11 +111,15 @@ app.get('/filedownload',function(req,res) {
     });
     */
     //res.download('D:/Python/uploads/'+req.query.filename);
-    res.send("download filename:"+req.query.filename);
+    //res.send("download filename:"+req.query.filename);
     //console.log("download filename:"+req.query.filename);
-    //res.download('./uploads/'+req.query.filename);
+    res.download('./uploads/'+req.query.filename);
 });
  
+
+app.get('/test',function(req,res) { 
+    res.send("test1"); 
+});
 //ocr--end---------------------------------------------------------------------------------
 
 
