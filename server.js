@@ -161,14 +161,13 @@ app.get('/filedownload',function(req,res) {
 
 //폴더목록
 app.post('/readDir',function(req,res) {
-    var testfolder = './'; 
+    var testfolder = './'+req.body.path; 
     fs.readdir(testfolder,function(error,filelist){
         console.log(filelist);
         res.send(filelist); 
 
     });
 });
-
 
 
 
