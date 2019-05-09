@@ -13,9 +13,9 @@ var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
 var upfilename = "";
  
 //운영 linux------------------------------------
-var uploadpath = './uploads';    
-var pyfile1 = './python/nodejs_call_data.py';
-var pyfile_pdftoimg = './python/common/PDFtoIMG.py';
+var uploadpath = '/opt/app-root/src/uploads';    
+var pyfile1 = '/opt/app-root/src/python/nodejs_call_data.py';
+var pyfile_pdftoimg = '/opt/app-root/src/python/common/PDFtoIMG.py';
  
 /*
 //개발 로컬-------------------------------------
@@ -98,8 +98,7 @@ app.post('/dscocr',function(req,res) {
 //서버 파일 다운로드
 app.get('/filedownload',function(req,res) {
     console.log("download filename:"+req.query.filename);
-    //res.send("download filename:"+req.query.filename);
-    res.download('./uploads/'+req.query.filename);
+    res.send("download filename:"+req.query.filename);
 });
 
 
@@ -125,8 +124,8 @@ app.get('/PDFtoIMG',function(req,res) {
         //res.writeHead(200,{"content-Type":"text/html; charset=utf-8"});
         //res.write("File is uploaded:",res.filename)
         returnstr = dataString;
-        console.log('Result:'+dataString);
-        res.send("Transfer pdf1:"+returnstr);
+        console.log('결과:'+dataString);
+        res.send("Transfer pdf:"+returnstr);
         //res.send();
     });
     py.stdin.write(JSON.stringify(data));       //파이썬 실행
