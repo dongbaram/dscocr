@@ -23,6 +23,7 @@ var pyfile1 = 'D:/Python/MS OCR/nodejs_call_data.py';
 var pyfile_pdftoimg = 'D:/Python/MS OCR/PDFtoIMG.py';
 //-------------------------------------------------
 */
+
 // error handling
 app.use(function(err, req, res, next){
     console.error(err.stack);
@@ -101,9 +102,10 @@ app.post('/dscocr',function(req,res) {
 
 
 //pdf to image -- 기존 올려진 파일이 있어야 함
-app.get('/PDFtoIMG',function(req,res) {
+app.post('/PDFtoIMG',function(req,res) {
      
-    console.log(uploadpath+'/'+req.query.pdffile);
+    var pdffile = uploadpath+'/'+ req.body.filename;
+    console.log(pdffile);
     
     var returnstr = "";
     //파이썬 호출----------------------------------
@@ -112,7 +114,7 @@ app.get('/PDFtoIMG',function(req,res) {
     //pyfile1
     //pyfile_pdftoimg
 
-    data = {"param1":uploadpath+'/'+req.query.pdffile,"param2":"v2"},       //파이썬에 전달할 파라미터
+    data = {"param1":pdffile,"param2":"v2"},       //파이썬에 전달할 파라미터
             dataString = "";
             py.stdout.on('data',function(data){
                 dataString += data.toString();
