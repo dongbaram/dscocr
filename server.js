@@ -11,15 +11,17 @@ var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
 
 //전역변수
 var upfilename = "";
-
+ 
 //운영 linux------------------------------------
 var uploadpath = './uploads';    
 var pyfile1 = './python/nodejs_call_data.py';
-
+var pyfile_pdftoimg = './python/common/PDFtoIMG.py';
+ 
 /*
-////개발 로컬-------------------------------------
+//개발 로컬-------------------------------------
 var uploadpath = 'D:/Python/uploads';    
 var pyfile1 = 'D:/Python/MS OCR/nodejs_call_data.py';
+var pyfile_pdftoimg = 'D:/Python/MS OCR/PDFtoIMG.py';
 //-------------------------------------------------
 */
 app.get('/', function (req, res) {
@@ -72,10 +74,10 @@ app.post('/dscocr',function(req,res) {
         py = spawn('python',[pyfile1]),  //파이썬 호출 파일
         
         data = {"param1":uploadpath+'/'+upfilename,"param2":"v2"},       //파이썬에 전달할 파라미터
-        dataString = "";
-        py.stdout.on('data',function(data){
-            dataString += data.toString();
-        });
+                dataString = "";
+                py.stdout.on('data',function(data){
+                    dataString += data.toString();
+                });
         py.stdout.on('end',function(){ 
             //결과 리턴 -----------------------------------------
             res.writeHead(200,{"content-Type":"text/html; charset=utf-8"});
@@ -98,6 +100,40 @@ app.get('/filedownload',function(req,res) {
     console.log("download filename:"+req.query.filename);
     res.send("download filename:"+req.query.filename);
 });
+
+
+//pdf to image -- 기존 올려진 파일이 있어야 함
+app.get('/PDFtoIMG',function(req,res) {
+     
+    console.log(uploadpath+'/'+req.query.pdffile);
+    
+    var returnstr = "";
+    //파이썬 호출----------------------------------
+    var spawn = require('child_process').spawn,
+    py = spawn('python',[pyfile_pdftoimg]),  //파이썬 호출 파일
+    //pyfile1
+    //pyfile_pdftoimg
+
+    data = {"param1":uploadpath+'/'+req.query.pdffile,"param2":"v2"},       //파이썬에 전달할 파라미터
+            dataString = "";
+            py.stdout.on('data',function(data){
+                dataString += data.toString();
+            });
+    py.stdout.on('end',function(){ 
+        //결과 리턴 -----------------------------------------
+        //res.writeHead(200,{"content-Type":"text/html; charset=utf-8"});
+        //res.write("File is uploaded:",res.filename)
+        returnstr = dataString;
+        console.log('결과:'+dataString);
+        res.send("Transfer pdf:"+returnstr);
+        //res.send();
+    });
+    py.stdin.write(JSON.stringify(data));       //파이썬 실행
+    py.stdin.end();
+    //--------------------------------------------------
+     
+});
+
  
 //ocr--end---------------------------------------------------------------------------------
 
