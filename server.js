@@ -8,7 +8,20 @@ var multer  =   require('multer');  //파일 업로드 //ocr-----------------
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'
     ;
-  
+
+//전역변수
+var upfilename = "";
+
+//운영 linux------------------------------------
+var uploadpath = './uploads';    
+var pyfile1 = './python/nodejs_call_data.py';
+
+/*
+////개발 로컬-------------------------------------
+var uploadpath = 'D:/Python/uploads';    
+var pyfile1 = 'D:/Python/MS OCR/nodejs_call_data.py';
+//-------------------------------------------------
+*/
 app.get('/', function (req, res) {
   // try to initialize the db on every request if it's not already
   // initialized.
@@ -17,47 +30,27 @@ app.get('/', function (req, res) {
     //res.render('index.html', { pageCountMessage : null});
 });
 
-app.get('/pagecount', function (req, res) {
-    //console.log(req.body);      //client 에게  받은 파라미터
-    console.log("download filename:"+req.query.filename);
-    //res.send("key1:"+req.query.key1);
-    /*
-    fs.readFile('./uploads/'+req.query.key1,function(req,res){
-        res.writeHead(200,{"content-Type":"text/html"});
-        res.end(data);
-    });
-    */
-    //res.download('D:/Python/uploads/'+req.query.filename);
-    res.send("download filename:"+req.query.filename);
-    //console.log("download filename:"+req.query.filename);
-    //res.download('./uploads/'+req.query.filename);
-});
-
 // error handling
 app.use(function(err, req, res, next){
   console.error(err.stack);
   res.status(500).send('Something bad happened!');
 });
 
+
 //ocr-----------------------------------------------------------------------------------
-
-
 app.post('/dscocr',function(req,res) {
     var storage =   multer.diskStorage({
         
         destination: function (req, file, cb) {                 // 파일 업로드 경로 지정
-          cb(null, './uploads');          //운영 linux
-          //cb(null, 'D:/Python/uploads');    //로컬 개발
+          cb(null, uploadpath);          //운영 linux
         },
         
         filename: function (req, file, cb) {                    //파일 업로드 처리
           console.log("file.originalname:"+file.originalname);
  
-          //upfilename = Date.now()+"_"+file.originalname         //날짜 + 시간 + 원래 파일명
-          upfilename = file.originalname         //날짜 + 시간 + 원래 파일명
+          upfilename = Date.now()+"_"+file.originalname         //날짜 + 시간 + 원래 파일명
+          //upfilename = file.originalname         //날짜 + 시간 + 원래 파일명
           cb(null, upfilename );
-          console.log("upfilename:"+upfilename);
-          temp2 = upfilename;
         }
       }); 
 
@@ -73,12 +66,12 @@ app.post('/dscocr',function(req,res) {
             console.log("doccode:"+req.body.doccode);
         }
 
+        console.log("upfilename:"+upfilename); 
         //파이썬 호출----------------------------------
         var spawn = require('child_process').spawn,
-        //py = spawn('python',['D:/Python/MS OCR/nodejs_call_data.py']),  //파이썬 호출 파일
-        py = spawn('python',['./python/nodejs_call_data.py']),  //운영 linux
+        py = spawn('python',[pyfile1]),  //파이썬 호출 파일
         
-        data = {"param1":"v1","param2":"v2"},       //파이썬에 전달할 파라미터
+        data = {"param1":uploadpath+'/'+upfilename,"param2":"v2"},       //파이썬에 전달할 파라미터
         dataString = "";
         py.stdout.on('data',function(data){
             dataString += data.toString();
@@ -87,9 +80,9 @@ app.post('/dscocr',function(req,res) {
             //결과 리턴 -----------------------------------------
             res.writeHead(200,{"content-Type":"text/html; charset=utf-8"});
             //res.write("File is uploaded:",res.filename)
-            res.write("File is uploaded:"+dataString);
+            res.write("File is uploaded:"+upfilename);
             res.end();
-            console.log('결과:'+dataString);
+            console.log('결과:'+upfilename);
         });
         py.stdin.write(JSON.stringify(data));       //파이썬 실행
         py.stdin.end();
@@ -100,26 +93,12 @@ app.post('/dscocr',function(req,res) {
 
 });
 
+//서버 파일 다운로드
 app.get('/filedownload',function(req,res) {
-    //console.log(req.body);      //client 에게  받은 파라미터
     console.log("download filename:"+req.query.filename);
-    //res.send("key1:"+req.query.key1);  // // 
-    /*
-    fs.readFile('./uploads/'+req.query.key1,function(req,res){
-        res.writeHead(200,{"content-Type":"text/html"});
-        res.end(data);
-    });
-    */
-    //res.download('D:/Python/uploads/'+req.query.filename);
-    //res.send("./uploads/"+req.query.filename);
-    //console.log("download filename:"+req.query.filename);
-    res.download("./uploads/"+req.query.filename);
+    res.send("download filename:"+req.query.filename);
 });
  
-
-app.get('/test',function(req,res) { 
-    res.send("test1"); 
-});
 //ocr--end---------------------------------------------------------------------------------
 
 
