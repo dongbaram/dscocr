@@ -159,6 +159,15 @@ app.get('/filedownload',function(req,res) {
     res.download(uploadpath + '/' + req.query.filename);
 });
 
+//폴더목록
+app.post('/readDir',function(req,res) {
+    var testfolder = './'; 
+    fs.readdir(testfolder,function(error,filelist){
+        console.log(filelist);
+        res.send(filelist); 
+
+    });
+});
 
 
 
