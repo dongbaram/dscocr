@@ -13,12 +13,14 @@ def read_in():      #처리 function
     return json.loads(lines[0])     #첫줄을 리턴
 
 def main():         #main function
+    
     param_data = read_in()
     arg1 = param_data["param1"]
-    #arg1 = 'D:/Python/uploads/1557366588289_test.pdf'
-    pdf_path=  arg1
-    pdf_path2='./uploads/test_out.pdf'
- 
+    try:
+        #arg1 = 'D:/Python/uploads/1557366588289_test.pdf'
+        pdf_path=  arg1
+        pdf_path2='./uploads/test_out.pdf'
+
     except Exception as msg:
         print(msg)
     else:
