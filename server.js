@@ -3,6 +3,7 @@ var express = require('express');
 var multer  =   require('multer');  //파일 업로드
 var app     =   express();  
 var bodyParser = require('body-parser');
+var fs = require('fs');
     
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'
