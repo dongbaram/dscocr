@@ -3,6 +3,7 @@ var express = require('express');
 var multer  =   require('multer');  //파일 업로드
 var app     =   express();  
 var fs = require('fs');
+var bodyParser = require('body-parser');
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'
@@ -17,6 +18,7 @@ app.use(function(err, req, res, next){
     console.error(err.stack);
     res.status(500).send('Something bad happened!');
   });
+app.use(bodyParser.urlencoded({extend:false}));
 
 //pdf to image -- 기존 올려진 파일이 있어야 함
 app.post('/pdfimg',function(req,res) {
