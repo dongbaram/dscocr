@@ -2,7 +2,7 @@ import sys,json, os
 
 def read_in():      #처리 function
     lines = sys.stdin.readlines()   #파라미터를 읽음
-    return json.loads(lines[0])     #첫줄을 리턴
+    return json.loads(lines[1])     #첫줄을 리턴
 
 def main():         #main function
     param_data = read_in()
