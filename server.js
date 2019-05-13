@@ -30,7 +30,7 @@ app.use(function(err, req, res, next){
     res.status(500).send('Something bad happened!');
   });
 // body parser
-app.use(bodyParser.urlencoded({extend:false}));
+app.use(bodyParser.urlencoded({extend:true}));
   
 
 app.get('/', function (req, res) {
