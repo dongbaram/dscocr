@@ -184,7 +184,7 @@ app.post('/pdfimg',function(req,res) {
         //파이썬 호출----------------------------------
         var spawn = require('child_process').spawn,
         //py = spawn('python',['D:/Python/MS OCR/PDFtoIMG_test.py']),  //파이썬 호출 파일
-        py = spawn('python',['./python/PDFtoIMG_test.py']),  //파이썬 호출 파일
+        py = spawn('python',['./python/common/PDFtoIMG_test.py']),  //파이썬 호출 파일
         //pyfile1
         //pyfile_pdftoimg
 
