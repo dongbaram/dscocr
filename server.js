@@ -210,6 +210,83 @@ app.post('/pdfimg',function(req,res) {
         res.send("Error:"+e.message);
     }
 });
+
+
+
+//pdf to image -- 기존 올려진 파일이 있어야 함
+app.post('/pdfimg2',function(req,res) {
+    try{
+        var pdffile = uploadpath+'/'+req.body.filename;
+        console.log('pdffile:'+pdffile);
+  
+        var returnstr = "";
+        //파이썬 호출----------------------------------
+        var spawn = require('child_process').spawn,
+        //py = spawn('python',['D:/Python/MS OCR/PDFtoIMG_test.py']),  //파이썬 호출 파일
+        py = spawn('python',['./python/common/pdftoimg_test.py']),  //파이썬 호출 파일
+        //pyfile1
+        //pyfile_pdftoimg
+
+        data = {"filename":pdffile,"param2":"v2"},       //파이썬에 전달할 파라미터
+                dataString = "";
+                py.stdout.on('data',function(data){
+                    dataString += data.toString();
+                });
+        py.stdout.on('end',function(){ 
+            //결과 리턴 -----------------------------------------
+            //res.writeHead(200,{"content-Type":"text/html; charset=utf-8"});
+            //res.write("File is uploaded:",res.filename)
+            returnstr = dataString;
+            console.log('결과1:'+dataString);
+            res.send("Transfer pdf1:"+returnstr);
+            //res.send();
+        });
+        py.stdin.write(JSON.stringify(data));       //파이썬 실행
+        py.stdin.end();
+        //--------------------------------------------------
+    }catch (e){
+        console.log(e.name+e.message);
+        res.send("Error:"+e.message);
+    }
+});
+
+
+//pdf to image -- 기존 올려진 파일이 있어야 함
+app.post('/pdfimg3',function(req,res) {
+    try{
+        var pdffile = uploadpath+'/'+req.body.filename;
+        console.log('pdffile:'+pdffile);
+  
+        var returnstr = "";
+        //파이썬 호출----------------------------------
+        var spawn = require('child_process').spawn,
+        //py = spawn('python',['D:/Python/MS OCR/PDFtoIMG_test.py']),  //파이썬 호출 파일
+        py = spawn('python',['./python/common/pdftoimg.py']),  //파이썬 호출 파일
+        //pyfile1
+        //pyfile_pdftoimg
+
+        data = {"filename":pdffile,"param2":"v2"},       //파이썬에 전달할 파라미터
+                dataString = "";
+                py.stdout.on('data',function(data){
+                    dataString += data.toString();
+                });
+        py.stdout.on('end',function(){ 
+            //결과 리턴 -----------------------------------------
+            //res.writeHead(200,{"content-Type":"text/html; charset=utf-8"});
+            //res.write("File is uploaded:",res.filename)
+            returnstr = dataString;
+            console.log('결과1:'+dataString);
+            res.send("Transfer pdf1:"+returnstr);
+            //res.send();
+        });
+        py.stdin.write(JSON.stringify(data));       //파이썬 실행
+        py.stdin.end();
+        //--------------------------------------------------
+    }catch (e){
+        console.log(e.name+e.message);
+        res.send("Error:"+e.message);
+    }
+});
 //TEST END---------------------
 
 app.listen(port, ip);
