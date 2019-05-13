@@ -82,6 +82,7 @@ app.post('/dscocr',function(req,res) {
                     dataString += data.toString();
                 });
         py.stdout.on('end',function(){ 
+            console.log('파이썬 리턴:'+dataString);
             //결과 리턴 -----------------------------------------
             res.writeHead(200,{"content-Type":"text/html; charset=utf-8"});
             //res.write("File is uploaded:",res.filename)
