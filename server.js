@@ -322,11 +322,12 @@ app.post('/dscocr2',function(req,res) {
             console.log("upfilename:"+upfilename); 
             //파이썬 호출----------------------------------
             var spawn = require('child_process').spawn;
-            var py = spawn('python',[pyfile1]);  //파이썬 호출 파일
-            //var py = spawn('python2','./python/pdftoimg.py');  //파이썬 호출 파일 
+            //var py = spawn('python',[pyfile1]);  //파이썬 호출 파일
+            var py = spawn('python2',['./python/pdftoimg.py']);  //파이썬 호출 파일 
         
-            var data = {"param1":uploadpath+'/'+upfilename,"param2":"v2"};       //파이썬에 전달할 파라미터
-            //var data = {"filename":uploadpath+'/'+upfilename,"param2":"v2"};       //파이썬에 전달할 파라미터
+
+            //var data = {"param1":uploadpath+'/'+upfilename,"param2":"v2"};       //파이썬에 전달할 파라미터
+            var data = {"filename":uploadpath+'/'+upfilename,"param2":"v2"};       //파이썬에 전달할 파라미터
             var dataString = "";
 
             py.stdout.on('data',function(data){
