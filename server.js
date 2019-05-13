@@ -291,59 +291,62 @@ app.post('/pdfimg3',function(req,res) {
 
 //ocr-----------------------------------------------------------------------------------
 app.post('/dscocr2',function(req,res) {
-    var storage =   multer.diskStorage({
-        
-        destination: function (req, file, cb) {                 // 파일 업로드 경로 지정
-          cb(null, uploadpath);          //운영 linux
-        },
-        
-        filename: function (req, file, cb) {                    //파일 업로드 처리
-          console.log("file.originalname:"+file.originalname);
- 
-          upfilename = Date.now()+"_"+file.originalname         //날짜 + 시간 + 원래 파일명
-          //upfilename = file.originalname         //날짜 + 시간 + 원래 파일명
-          cb(null, upfilename );
-        }
-      }); 
+    try{
+        var storage =   multer.diskStorage({
+            
+            destination: function (req, file, cb) {                 // 파일 업로드 경로 지정
+            cb(null, uploadpath);          //운영 linux
+            },
+            
+            filename: function (req, file, cb) {                    //파일 업로드 처리
+            console.log("file.originalname:"+file.originalname);
+    
+            upfilename = Date.now()+"_"+file.originalname         //날짜 + 시간 + 원래 파일명
+            //upfilename = file.originalname         //날짜 + 시간 + 원래 파일명
+            cb(null, upfilename );
+            }
+        }); 
 
-    var upload = multer({ storage : storage}).single('ocrfile'); //client 에서 호출명
+        var upload = multer({ storage : storage}).single('ocrfile'); //client 에서 호출명
 
-    console.log("app post /dscocr"); 
+        console.log("app post /dscocr"); 
 
-    upload(req,res,function(err) {
-        if(err) {
-            return res.end("Error uploading file.");
-        }else{
-            console.log(req.body);      //client 에게  받은 파라미터
-            console.log("doccode:"+req.body.doccode);
-        }
+        upload(req,res,function(err) {
+            if(err) {
+                return res.end("Error uploading file.");
+            }else{
+                console.log(req.body);      //client 에게  받은 파라미터
+                console.log("doccode:"+req.body.doccode);
+            }
 
-        console.log("upfilename:"+upfilename); 
-        //파이썬 호출----------------------------------
-        var spawn = require('child_process').spawn;
-        var py = spawn('python','./python/pdftoimg.py');  //파이썬 호출 파일
-        
-        var data = {"filename":uploadpath+'/'+upfilename,"param2":"v2"};       //파이썬에 전달할 파라미터
-        var dataString = "";
+            console.log("upfilename:"+upfilename); 
+            //파이썬 호출----------------------------------
+            var spawn = require('child_process').spawn;
+            var py = spawn('python','./python/pdftoimg.py');  //파이썬 호출 파일
+            
+            var data = {"filename":uploadpath+'/'+upfilename,"param2":"v2"};       //파이썬에 전달할 파라미터
+            var dataString = "";
 
-        py.stdout.on('data',function(data){
-                    dataString += data.toString();
-                });
-        py.stdout.on('end',function(){ 
-            //결과 리턴 -----------------------------------------
-            res.writeHead(200,{"content-Type":"text/html; charset=utf-8"});
-            //res.write("File is uploaded:",res.filename)
-            res.write("File is uploaded:"+dataString);
-            res.end();
-            console.log('결과:'+dataString);
-        });
-        py.stdin.write(JSON.stringify(data));       //파이썬 실행
-        py.stdin.end();
-        //--------------------------------------------------
+            py.stdout.on('data',function(data){
+                        dataString += data.toString();
+                    });
+            py.stdout.on('end',function(){ 
+                //결과 리턴 -----------------------------------------
+                res.writeHead(200,{"content-Type":"text/html; charset=utf-8"});
+                //res.write("File is uploaded:",res.filename)
+                res.write("File is uploaded:"+dataString);
+                res.end();
+                console.log('결과:'+dataString);
+            });
+            py.stdin.write(JSON.stringify(data));       //파이썬 실행
+            py.stdin.end();
+            //--------------------------------------------------
 
 
-    }); 
-
+        }); 
+    }catch (e){
+        res.send("Transfer pdf:"+e.message);
+    }
 });
 //TEST END---------------------
 
