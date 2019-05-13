@@ -1,4 +1,4 @@
-import sys
+import sys, json
 
-msg = sys.stdin.readline()
+msg = json.loads(sys.argv[1])['param2']
 print(msg)
