@@ -14,7 +14,8 @@
     "object-assign":"4.1.0",
     "multer":"^1.1.0",
     "body-parser":"^1.19.0",
-    "fs":"^0.0.1-security"
+    "fs":"^0.0.1-security",
+    "child_process":"^1.0.2"
   },
   "engine": {
     "node": "*",
