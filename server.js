@@ -311,8 +311,6 @@ app.post('/pdfimg3',function(req,res) {
     }
 });
 
-
-//ocr-----------------------------------------------------------------------------------
 app.post('/dscocr2',function(req,res) {
     try{
         var storage =   multer.diskStorage({
@@ -332,7 +330,7 @@ app.post('/dscocr2',function(req,res) {
 
         var upload = multer({ storage : storage}).single('ocrfile'); //client 에서 호출명
 
-        console.log("app post /dscocr"); 
+        console.log("app post /dscocr2"); 
 
         upload(req,res,function(err) {
             if(err) {
@@ -345,10 +343,9 @@ app.post('/dscocr2',function(req,res) {
             console.log("upfilename:"+upfilename); 
             //파이썬 호출----------------------------------
             var spawn = require('child_process').spawn;
-            //var py = spawn('python',[pyfile1]);  //파이썬 호출 파일
-            var py = spawn('python2',['./python/pdftoimg.py']);  //파이썬 호출 파일 
+            var py = spawn('python',['./python/PDFtoIMG_test.py']);  //파이썬 호출 파일
+            //var py = spawn('python',['D:/Python/MS OCR/PDFtoIMG_test.py']);  //파이썬 호출 파일 
         
-
             //var data = {"param1":uploadpath+'/'+upfilename,"param2":"v2"};       //파이썬에 전달할 파라미터
             var data = {"filename":uploadpath+'/'+upfilename,"param2":"v2"};       //파이썬에 전달할 파라미터
             var dataString = "";
