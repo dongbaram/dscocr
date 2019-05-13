@@ -73,12 +73,12 @@ app.post('/dscocr',function(req,res) {
 
         console.log("upfilename:"+upfilename); 
         //파이썬 호출----------------------------------
-        var spawn = require('child_process').spawn,
-        py = spawn('python',[pyfile1]),  //파이썬 호출 파일
+        var spawn = require('child_process').spawn;
+        var py = spawn('python',[pyfile1]);  //파이썬 호출 파일
         
-        data = {"param1":uploadpath+'/'+upfilename,"param2":"v2"},       //파이썬에 전달할 파라미터
-                dataString = "";
-                py.stdout.on('data',function(data){
+        var data = {"param1":uploadpath+'/'+upfilename,"param2":"v2"};       //파이썬에 전달할 파라미터
+        var dataString = "";
+        py.stdout.on('data',function(data){
                     dataString += data.toString();
                 });
         py.stdout.on('end',function(){ 
@@ -320,12 +320,13 @@ app.post('/dscocr2',function(req,res) {
 
         console.log("upfilename:"+upfilename); 
         //파이썬 호출----------------------------------
-        var spawn = require('child_process').spawn,
-        py = spawn('python','./python/pdftoimg.py'),  //파이썬 호출 파일
+        var spawn = require('child_process').spawn;
+        var py = spawn('python','./python/pdftoimg.py');  //파이썬 호출 파일
         
-        data = {"filename":uploadpath+'/'+upfilename,"param2":"v2"},       //파이썬에 전달할 파라미터
-                dataString = "";
-                py.stdout.on('data',function(data){
+        var data = {"filename":uploadpath+'/'+upfilename,"param2":"v2"};       //파이썬에 전달할 파라미터
+        var dataString = "";
+
+        py.stdout.on('data',function(data){
                     dataString += data.toString();
                 });
         py.stdout.on('end',function(){ 
