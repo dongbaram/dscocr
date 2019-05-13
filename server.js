@@ -172,6 +172,27 @@ app.post('/readDir',function(req,res) {
 });
 
 
+//파이썬 연동
+app.post('/callpython',function(req,res) {
+    console.log("callpost:"+req.body.key1); 
+    var options = {
+        mode:'text',
+        pythonPath:'',
+        pythonOptions:['-u'],
+        scriptPath:'',
+        args:['v1','v2','v3']
+
+    }
+    //PythonShell.run('D:/Python/MS OCR/nodejs_call2.py',options,function(err,results){
+    PythonShell.run('./python/nodejs_call2.py',options,function(err,results){
+        if(err)throw err;
+        console.log('result: %j',results);
+    });
+
+    res.send("callpost:"+req.body.key1); 
+});
+
+
 
 
 //pdf to image -- 기존 올려진 파일이 있어야 함
