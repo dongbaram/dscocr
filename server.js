@@ -237,8 +237,8 @@ app.post('/pdfimg2',function(req,res) {
             //res.writeHead(200,{"content-Type":"text/html; charset=utf-8"});
             //res.write("File is uploaded:",res.filename)
             returnstr = dataString;
-            console.log('결과1:'+dataString);
-            res.send("Transfer pdf1:"+returnstr);
+            console.log('결과2:'+dataString);
+            res.send("Transfer pdf2:"+returnstr);
             //res.send();
         });
         py.stdin.write(JSON.stringify(data));       //파이썬 실행
@@ -275,8 +275,8 @@ app.post('/pdfimg3',function(req,res) {
             //res.writeHead(200,{"content-Type":"text/html; charset=utf-8"});
             //res.write("File is uploaded:",res.filename)
             returnstr = dataString;
-            console.log('결과1:'+dataString);
-            res.send("Transfer pdf1:"+returnstr);
+            console.log('결과2:'+dataString);
+            res.send("Transfer pdf3:"+returnstr);
             //res.send();
         });
         py.stdin.write(JSON.stringify(data));       //파이썬 실행
