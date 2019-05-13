@@ -3,6 +3,7 @@
 def main():         #main function
     try:
         arg1 = "123"
+        print
 
     except Exception as msg:
         print(msg)
