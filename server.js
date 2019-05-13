@@ -176,6 +176,8 @@ app.post('/readDir',function(req,res) {
 
 //파이썬 연동
 app.post('/callpython',function(req,res) {
+    var {PythonShell} = require('python-shell');
+
     console.log("callpost:"+req.body.key1);  
     var options = {
         mode:'text',
